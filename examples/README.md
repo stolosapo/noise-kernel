@@ -1,8 +1,8 @@
-# example of using `<autotoolscpplibtemplate>` lib
+# example of using `noisekernel` lib
 
 ## build example
 ```bash
 g++ -g -c -o example.o example.cpp
-g++ example.o -o example -l<autotoolscpplibtemplate>
+g++ example.o -o example -lnoisekernel
 ./example
 ```
