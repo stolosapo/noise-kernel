@@ -5,10 +5,13 @@ bin_PROGRAMS = noisekernel
 
 mainincludedir = $(includedir)/noisekernel
 maininclude_HEADERS = \
-    all_header_files.h
+    Argument.h
 
 common_sources = \
-    all_source_files.cpp
+    argument/Argument.cpp \
+    argument/ArgumentList.cpp \
+    argument/ArgumentParser.cpp   
+
 
 noisekernel_SOURCES = main.cpp $(common_sources)
 noisekernel_LDADD = libnoisekernel.la
