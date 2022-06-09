@@ -13,6 +13,7 @@ common_sources = \
     argument/ArgumentList.cpp \
     argument/ArgumentParser.cpp \
     argument/ArgumentProvider.cpp \
+    argument/MockAdapter.h argument/MockAdapter.cpp \
     \
     utils/StringHelper.h utils/StringHelper.cpp
 

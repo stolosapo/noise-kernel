@@ -85,12 +85,11 @@ namespace NoiseKernel
         virtual ~ArgumentAdapter();
 
         virtual string help();
+        virtual void registerArguments() = 0;
 
     protected:
         virtual string title() = 0;
         void registerArg(string name, string description);
-
-        virtual void registerArguments() = 0;
 
         bool hasArg(string name) const;
         string getStringValue(string name) const;
