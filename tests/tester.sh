@@ -2,6 +2,7 @@
 
 g++ -g -c -o main.o main.cpp
 g++ -g -c -o MainTestSuite.o MainTestSuite.cpp
+g++ -g -c -o ArgumentListTest.o argument/ArgumentListTest.cpp
 g++ -g -c -o ArgumentParserTest.o argument/ArgumentParserTest.cpp
 
 g++ -g -c -o StringHelper.o ../src/utils/StringHelper.cpp
@@ -23,6 +24,7 @@ g++ main.o \
     ArgumentProvider.o \
     \
     MainTestSuite.o \
+    ArgumentListTest.o \
     ArgumentParserTest.o \
     \
     -o tester -lnoisetest
