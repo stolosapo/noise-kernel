@@ -4,6 +4,7 @@
 #include <noisetest/UnitTestSuite.h>
 
 void test_arg_parser();
+void test_arg_parser_with_no_args();
 
 class ArgumentParserTest: public NoiseTest::UnitTestSuite
 {
