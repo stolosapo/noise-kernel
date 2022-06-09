@@ -56,33 +56,47 @@ namespace NoiseKernel
         void print(int argc, char* argv[]);
     };
 
-    // class ArgumentAdapter
-    // {
-    // private:
-    //     ArgumentService* argService;
+    class ArgumentProvider
+    {
+    private:
+        ArgumentList* arguments;
 
-    //     map<string, string> registeredArgs;
+    public:
+        ArgumentProvider(int argc, char* argv[]);
+        virtual ~ArgumentProvider();
 
-    //     bool argExist(const string& name) const;
+        bool hasArg(string name) const;
+        string getStringValue(string name) const;
+        int getIntValue(string name) const;
+        bool getBoolValue(string name) const;
+    };
 
-    // public:
-    //     ArgumentAdapter(ArgumentService* argService);
-    //     virtual ~ArgumentAdapter();
+    class ArgumentAdapter
+    {
+    private:
+        ArgumentProvider* provider;
 
-    //     virtual string help();
+        map<string, string> registeredArgs;
 
-    // protected:
-    //     virtual string title() = 0;
-    //     void registerArg(string name, string description);
+        bool argExist(const string& name) const;
 
-    //     virtual void registerArguments() = 0;
+    public:
+        ArgumentAdapter(ArgumentProvider* provider);
+        virtual ~ArgumentAdapter();
 
-    //     bool hasArg(string name) const;
-    //     string getStringValue(string name) const;
-    //     int getIntValue(string name) const;
-    //     bool getBoolValue(string name) const;
+        virtual string help();
 
-    // };
+    protected:
+        virtual string title() = 0;
+        void registerArg(string name, string description);
+
+        virtual void registerArguments() = 0;
+
+        bool hasArg(string name) const;
+        string getStringValue(string name) const;
+        int getIntValue(string name) const;
+        bool getBoolValue(string name) const;
+    };
 
 }
 

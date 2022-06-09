@@ -9,8 +9,12 @@ maininclude_HEADERS = \
 
 common_sources = \
     argument/Argument.cpp \
+    argument/ArgumentAdapter.cpp \
     argument/ArgumentList.cpp \
-    argument/ArgumentParser.cpp   
+    argument/ArgumentParser.cpp \
+    argument/ArgumentProvider.cpp \
+    \
+    utils/StringHelper.h utils/StringHelper.cpp
 
 
 noisekernel_SOURCES = main.cpp $(common_sources)
