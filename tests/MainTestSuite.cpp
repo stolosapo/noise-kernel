@@ -1,4 +1,5 @@
 #include "MainTestSuite.h"
+#include "argument/ArgumentParserTest.h"
 
 MainTestSuite::MainTestSuite(): UnitTestSuite("Main Test Suite", 0)
 {
@@ -12,6 +13,5 @@ MainTestSuite::~MainTestSuite()
 
 void MainTestSuite::registerTests()
 {
-    // TODO: Add here all tests or other suites
-    // registerTest(new OtherTestSuite);
+    registerTest(new ArgumentParserTest);
 }
