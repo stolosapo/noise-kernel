@@ -3,6 +3,7 @@
 ## build example
 ```bash
 g++ -g -c -o example.o example.cpp
-g++ example.o -o example -lnoisekernel
+g++ -g -c -o ExampleArgumentAdapter.o argument/ExampleArgumentAdapter.cpp
+g++ example.o ExampleArgumentAdapter.o -o example -lnoisekernel
 ./example
 ```
