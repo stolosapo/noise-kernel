@@ -6,5 +6,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- `Argument`'s package
+- `Argument`s package
 - `Signal`s package
+- `Observer`s package

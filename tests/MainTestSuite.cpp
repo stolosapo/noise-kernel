@@ -4,6 +4,7 @@
 #include "argument/ArgumentProviderTest.h"
 #include "argument/ArgumentAdapterTest.h"
 #include "signal/SignalAdapterTest.h"
+#include "observer/EventTest.h"
 
 MainTestSuite::MainTestSuite(): UnitTestSuite("Main Test Suite", 0)
 {
@@ -22,4 +23,5 @@ void MainTestSuite::registerTests()
     registerTest(new ArgumentProviderTest);
     registerTest(new ArgumentAdapterTest);
     registerTest(new SignalAdapterTest);
+    registerTest(new EventTest);
 }

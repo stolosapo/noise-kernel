@@ -6,7 +6,8 @@ bin_PROGRAMS = noisekernel
 mainincludedir = $(includedir)/noisekernel
 maininclude_HEADERS = \
     Argument.h \
-    Signal.h
+    Signal.h \
+    Observer.h
 
 common_sources = \
     argument/Argument.cpp \
@@ -20,6 +21,10 @@ common_sources = \
     signal/Signal.cpp \
     signal/SignalAdapter.cpp \
     signal/SignalHandler.cpp \
+    \
+    observer/Event.cpp \
+    observer/EventArgs.cpp \
+    observer/EventHandler.cpp \
     \
     utils/StringHelper.h utils/StringHelper.cpp
 
