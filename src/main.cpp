@@ -14,12 +14,12 @@ int main(int argc, char* argv[])
     adapter.registerArguments();
     cout << adapter.help() << endl;
 
-    NoiseKernel::SignalAdapter signalAdapter;
-    signalAdapter.registerSignals();
-    signalAdapter.setup();
-    cout << "Got SIGINT: " << signalAdapter.gotSigInt() << endl;
-    raise(SIGINT);
-    cout << "Got SIGINT and reset it: " << signalAdapter.gotSigIntAndReset() << endl;
+    // NoiseKernel::SignalAdapter signalAdapter;
+    // signalAdapter.registerSignals();
+    // signalAdapter.setup();
+    // cout << "Got SIGINT: " << signalAdapter.gotSigInt() << endl;
+    // raise(SIGINT);
+    // cout << "Got SIGINT and reset it: " << signalAdapter.gotSigIntAndReset() << endl;
 
     cout << "Bye Bye.." << endl;
 }
