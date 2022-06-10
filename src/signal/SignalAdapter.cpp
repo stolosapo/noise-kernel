@@ -31,6 +31,5 @@ bool SignalAdapter::gotSigIntAndReset()
         reset(SIGINT);
     }
 
-
     return got;
 }
