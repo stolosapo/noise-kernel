@@ -5,7 +5,8 @@ bin_PROGRAMS = noisekernel
 
 mainincludedir = $(includedir)/noisekernel
 maininclude_HEADERS = \
-    Argument.h
+    Argument.h \
+    Signal.h
 
 common_sources = \
     argument/Argument.cpp \
@@ -14,6 +15,11 @@ common_sources = \
     argument/ArgumentParser.cpp \
     argument/ArgumentProvider.cpp \
     argument/MockAdapter.h argument/MockAdapter.cpp \
+    \
+    signal/Signal_SIGINT.cpp \
+    signal/Signal.cpp \
+    signal/SignalAdapter.cpp \
+    signal/SignalHandler.cpp \
     \
     utils/StringHelper.h utils/StringHelper.cpp
 
