@@ -60,23 +60,7 @@ namespace NoiseKernel
         Thread& operator+=(ThreadDelegate delegate);
         Thread& operator-=(ThreadDelegate delegate);
     };
-
-    class ThreadInterceptionData
-    {
-    private:
-        Thread* th;
-        ThreadDelegate delegate;
-        void* data;
-
-    public:
-        ThreadInterceptionData(Thread* th, ThreadDelegate delegate, void* data);
-        virtual ~ThreadInterceptionData();
-
-        virtual Thread* getThread();
-        virtual ThreadDelegate getDelegate();
-        virtual void* getData();
-    };
-    
+  
     class ThreadPool
     {
     private:

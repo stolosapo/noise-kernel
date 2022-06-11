@@ -1,4 +1,5 @@
 #include "../Thread.h"
+#include "ThreadInterceptionData.h"
 #include "../utils/StringHelper.h"
 
 using namespace NoiseKernel;
