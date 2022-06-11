@@ -12,7 +12,7 @@ using namespace std;
 
 namespace NoiseKernel
 {
-    typedef void* (*ThreadDelegate)(void* contect);
+    typedef void* (*ThreadDelegate)(void* context);
 
     class Thread
     {
