@@ -1,5 +1,5 @@
 #include "../Thread.h"
-#include "ThreadInterceptionData.h"
+#include "ThreadContext.h"
 #include "../utils/StringHelper.h"
 
 using namespace NoiseKernel;
@@ -55,11 +55,11 @@ void Thread::detachDelegate(ThreadDelegate delegate)
     this->delegate = NULL;
 }
 
-void* Thread::delegateInterceptor(void* interceptionData)
+void* Thread::delegateThreadContext(void* threadContext)
 {
-    ThreadInterceptionData* interception = (ThreadInterceptionData*) interceptionData;
-    ThreadDelegate dlg = interception->getDelegate();
-    Thread* th = interception->getThread();
+    ThreadContext* context = (ThreadContext*) threadContext;
+    ThreadDelegate dlg = context->getDelegate();
+    Thread* th = context->getThread();
 
     th->setSelfId();
     th->setMustDispose(true);
@@ -69,20 +69,20 @@ void* Thread::delegateInterceptor(void* interceptionData)
     try
     {
         th->running = true;
-        retval = dlg(interception->getData());
+        retval = dlg(context->getData());
         th->running = false;
     }
     catch(exception& e)
     {
         th->running = false;
-        delete interception;
-        interception = NULL;
+        delete context;
+        context = NULL;
 
         throw e;
     }
 
-    delete interception;
-    interception = NULL;
+    delete context;
+    context = NULL;
 
     return retval;
 }
@@ -95,9 +95,9 @@ bool Thread::start(void* data)
     }
 
     /* TODO: WARNING!! This produces memory leak if thread will not finished gracefully!! */
-    ThreadInterceptionData* interception = new ThreadInterceptionData(this, delegate, data);
+    ThreadContext* context = new ThreadContext(this, delegate, data);
 
-    int status = pthread_create(&_thread, NULL, delegateInterceptor, interception);
+    int status = pthread_create(&_thread, NULL, delegateThreadContext, context);
 
     return (status == 0);
 }

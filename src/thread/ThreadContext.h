@@ -1,11 +1,11 @@
-#ifndef ThreadInterceptionData_h__
-#define ThreadInterceptionData_h__
+#ifndef ThreadContext_h__
+#define ThreadContext_h__
 
 #include "../Thread.h"
 
 namespace NoiseKernel
 {
-    class ThreadInterceptionData
+    class ThreadContext
     {
     private:
         Thread* th;
@@ -13,8 +13,8 @@ namespace NoiseKernel
         void* data;
 
     public:
-        ThreadInterceptionData(Thread* th, ThreadDelegate delegate, void* data);
-        virtual ~ThreadInterceptionData();
+        ThreadContext(Thread* th, ThreadDelegate delegate, void* data);
+        virtual ~ThreadContext();
 
         virtual Thread* getThread();
         virtual ThreadDelegate getDelegate();
@@ -22,4 +22,4 @@ namespace NoiseKernel
     };
 }
 
-#endif // ThreadInterceptionData_h__
+#endif // ThreadContext_h__

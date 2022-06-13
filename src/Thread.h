@@ -58,7 +58,7 @@ namespace NoiseKernel
         bool dispose;
         bool running;
 
-        static void* delegateInterceptor(void *);
+        static void* delegateThreadContext(void *);
 
         void setId(long long id);
         void setSelfId();

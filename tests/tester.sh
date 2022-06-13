@@ -37,7 +37,7 @@ g++ -g -c -o Locker.o ../src/thread/Locker.cpp
 g++ -g -c -o TaskContext.o ../src/thread/TaskContext.cpp
 g++ -g -c -o TaskRunner.o ../src/thread/TaskRunner.cpp
 g++ -g -c -o Thread.o ../src/thread/Thread.cpp
-g++ -g -c -o ThreadInterceptionData.o ../src/thread/ThreadInterceptionData.cpp
+g++ -g -c -o ThreadContext.o ../src/thread/ThreadContext.cpp
 g++ -g -c -o ThreadPool.o ../src/thread/ThreadPool.cpp
 
 g++ main.o \
@@ -64,7 +64,7 @@ g++ main.o \
     TaskContext.o \
     TaskRunner.o \
     Thread.o \
-    ThreadInterceptionData.o \
+    ThreadContext.o \
     ThreadPool.o \
     \
     MainTestSuite.o \

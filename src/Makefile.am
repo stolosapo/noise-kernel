@@ -37,7 +37,7 @@ common_sources = \
     thread/TaskContext.cpp \
     thread/TaskRunner.cpp \
     thread/Thread.cpp \
-    thread/ThreadInterceptionData.h thread/ThreadInterceptionData.cpp \
+    thread/ThreadContext.h thread/ThreadContext.cpp \
     thread/ThreadPool.cpp \
     \
     utils/StringHelper.h utils/StringHelper.cpp
