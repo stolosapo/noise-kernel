@@ -1,7 +1,7 @@
 #ifndef ThreadInterceptionData_h__
 #define ThreadInterceptionData_h__
 
-#include "Thread.h"
+#include "../Thread.h"
 
 namespace NoiseKernel
 {
@@ -20,7 +20,6 @@ namespace NoiseKernel
         virtual ThreadDelegate getDelegate();
         virtual void* getData();
     };
-
 }
 
 #endif // ThreadInterceptionData_h__
