@@ -1,4 +1,4 @@
-#include "../Thread.h"
+#include "ThreadInterceptionData.h"
 
 using namespace NoiseKernel;
 

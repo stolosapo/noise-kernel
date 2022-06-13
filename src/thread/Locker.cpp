@@ -1,4 +1,4 @@
-#include "../Sync.h"
+#include "../Thread.h"
 
 using namespace NoiseKernel;
 
