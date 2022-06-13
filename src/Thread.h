@@ -13,7 +13,7 @@ using namespace std;
 
 namespace NoiseKernel
 {
-    typedef void* (*ThreadDelegate)(void* context);
+    typedef void* (*ThreadDelegate)(void* data);
 
     class Locker
     {
@@ -119,19 +119,22 @@ namespace NoiseKernel
         int numberOfActiveThreads();
     };
 
-    class TaskContext
+    class Task
     {
     private:
-        string task;
+        string taskName;
         vector<string> params;
+        Thread *runningThread;
         void* data;
 
     public:
-        TaskContext(string task, vector<string> params, void* data);
-        virtual ~TaskContext();
+        Task(string taskName, vector<string> params, Thread* runningThread, void* data);
+        virtual ~Task();
 
-        string getTask();
+        string getTaskName();
         string getParam(int index);
+        vector<string> getParams();
+        Thread* getRunningThread();
         void* getData();
     };
 
@@ -154,11 +157,9 @@ namespace NoiseKernel
 
         virtual bool taskExist(string task);
         virtual bool parametrizedTaskExist(string task);
-        virtual Thread* startTask(string task, void* data);
-        virtual Thread* startTask(ThreadDelegate delegate, void* data);
-        virtual void startTaskDetached(string task, void* data);
+        virtual Task* startTask(string task, void* data);
+        virtual Task* startTask(ThreadDelegate delegate, void* data);
         virtual void* runTask(string task, void* data);
-        virtual void* runParametrizedTask(string task, void* data);
     };
 
 }

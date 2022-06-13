@@ -11,7 +11,7 @@ using namespace std;
 
 void mockObserverDelegate(void* sender, NoiseKernel::EventArgs* e);
 void* mockThreadDelegate(void* data);
-void* mockTaskWithContextDelegate(void* data);
+void* mockTaskDelegate(void* taskContext);
 
 class MockArgumentAdapter: public NoiseKernel::ArgumentAdapter
 {

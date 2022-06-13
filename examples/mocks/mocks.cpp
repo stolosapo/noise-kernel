@@ -92,14 +92,13 @@ void* mockThreadDelegate(void* data)
     return NULL;
 }
 
-void* mockTaskWithContextDelegate(void* data)
+void* mockTaskDelegate(void* taskContext)
 {
-    NoiseKernel::TaskContext *context = (NoiseKernel::TaskContext*) data;
-
-    cout << "*** Running task: " << context->getTask() 
-        << " param0: " << context->getParam(0) 
-        << " param1: " << context->getParam(1) 
-        << " param2: " << context->getParam(2) << endl;
+    NoiseKernel::Task *ctx = (NoiseKernel::Task*) taskContext;
+    cout << "*** Running task: " << ctx->getTaskName() 
+        << " param0: " << ctx->getParam(0) 
+        << " param1: " << ctx->getParam(1) 
+        << " param2: " << ctx->getParam(2) << endl;
     
     return NULL;
 }

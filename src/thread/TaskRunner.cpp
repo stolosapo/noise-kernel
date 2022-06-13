@@ -45,66 +45,25 @@ vector<string> TaskRunner::getParamsFromParametrizedCommand(string command)
     return split(paramsStr, PARAM_DELIMITER);
 }
 
-void TaskRunner::registerTask(string task, ThreadDelegate delegate)
+void TaskRunner::registerTask(string taskName, ThreadDelegate delegate)
 {
-    tasks->registerStrategy(task, delegate);
+    tasks->registerStrategy(taskName, delegate);
 }
 
-bool TaskRunner::taskExist(string task)
+bool TaskRunner::taskExist(string taskName)
 {
-    return tasks->keyExists(task);
+    return tasks->keyExists(taskName);
 }
 
-bool TaskRunner::parametrizedTaskExist(string task)
+bool TaskRunner::parametrizedTaskExist(string taskName)
 {
-    return taskExist(getTaskFromParametrizedCommand(task));
+    return taskExist(getTaskFromParametrizedCommand(taskName));
 }
 
-Thread* TaskRunner::startTask(string task, void* data)
+Task* TaskRunner::startTask(string fullTaskName, void* data)
 {
-    ThreadDelegate delegate = tasks->get(task);
-
-    return startTask(delegate, data);
-}
-
-Thread* TaskRunner::startTask(ThreadDelegate delegate, void* data)
-{
-    if (delegate == NULL)
-    {
-        return NULL;
-    }
-
-    Thread* th = new Thread;
-
-    th->attachDelegate(delegate);
-    th->start(data);
-
-    return th;
-}
-
-void TaskRunner::startTaskDetached(string task, void* data)
-{
-    Thread* th = startTask(task, data);
-
-    th->detach();
-}
-
-void* TaskRunner::runTask(string task, void* data)
-{
-    ThreadDelegate delegate = tasks->get(task);
-
-    if (delegate == NULL)
-    {
-        return NULL;
-    }
-
-    return delegate(data);
-}
-
-void* TaskRunner::runParametrizedTask(string task, void* data)
-{
-    string taskName = getTaskFromParametrizedCommand(task);
-    vector<string> params = getParamsFromParametrizedCommand(task);
+    string taskName = getTaskFromParametrizedCommand(fullTaskName);
+    vector<string> params = getParamsFromParametrizedCommand(taskName);
 
     ThreadDelegate delegate = tasks->get(taskName);
 
@@ -113,7 +72,41 @@ void* TaskRunner::runParametrizedTask(string task, void* data)
         return NULL;
     }
 
-    TaskContext* context = new TaskContext(taskName, params, data);
+    Thread *runningThread = new Thread;
+    runningThread->attachDelegate(delegate);
+
+    Task* task = new Task(taskName, params, runningThread, data);
+    runningThread->start(task);
+
+    return task;
+}
+
+Task* TaskRunner::startTask(ThreadDelegate delegate, void* data)
+{
+    Thread *runningThread = new Thread;
+    runningThread->attachDelegate(delegate);
+
+    vector<string> params;
+
+    Task* task = new Task("", params, runningThread, data);
+    runningThread->start(task);
+
+    return task;
+}
+
+void* TaskRunner::runTask(string fullTaskName, void* data)
+{
+    string taskName = getTaskFromParametrizedCommand(fullTaskName);
+    vector<string> params = getParamsFromParametrizedCommand(taskName);
+
+    ThreadDelegate delegate = tasks->get(taskName);
+
+    if (delegate == NULL)
+    {
+        return NULL;
+    }
+
+    Task* context = new Task(taskName, params, NULL, data);
     void* result = NULL;
 
     try
