@@ -1,4 +1,4 @@
-#include "../Task.h"
+#include "../Thread.h"
 
 using namespace NoiseKernel;
 

@@ -1,4 +1,4 @@
-#include "../Task.h"
+#include "../Thread.h"
 #include "../utils/StringHelper.h"
 
 using namespace NoiseKernel;
@@ -71,7 +71,7 @@ Thread* TaskRunner::startTask(ThreadDelegate delegate, void* data)
 {
     if (delegate == NULL)
     {
-            return NULL;
+        return NULL;
     }
 
     Thread* th = new Thread;
@@ -129,9 +129,4 @@ void* TaskRunner::runParametrizedTask(string task, void* data)
     delete context;
 
     return result;
-}
-
-string TaskRunner::list()
-{
-
 }

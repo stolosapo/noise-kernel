@@ -2,16 +2,49 @@
 #define Thread_h__
 
 #include <string>
+#include <vector>
 #include <pthread.h>
 #include <map>
 
 #include "Queue.h"
+#include "Strategy.h"
 
 using namespace std;
 
 namespace NoiseKernel
 {
     typedef void* (*ThreadDelegate)(void* context);
+
+    class Locker
+    {
+    private:
+        pthread_mutex_t _mutex;
+
+    public:
+        Locker();
+        virtual ~Locker();
+
+        virtual int init();
+        virtual int lock();
+        virtual int unlock();
+        virtual int destroy();
+    };
+
+    class Barrier
+    {
+    private:
+        pthread_barrier_t _barrier;
+
+        int number;
+
+    public:
+        Barrier(int number);
+        virtual ~Barrier();
+
+        virtual int init();
+        virtual int wait();
+        virtual int destroy();
+    };
 
     class Thread
     {
@@ -86,35 +119,46 @@ namespace NoiseKernel
         int numberOfActiveThreads();
     };
 
-    class Locker
+    class TaskContext
     {
     private:
-        pthread_mutex_t _mutex;
+        string task;
+        vector<string> params;
+        void* data;
 
     public:
-        Locker();
-        virtual ~Locker();
+        TaskContext(string task, vector<string> params, void* data);
+        virtual ~TaskContext();
 
-        virtual int init();
-        virtual int lock();
-        virtual int unlock();
-        virtual int destroy();
+        string getTask();
+        string getParam(int index);
+        void* getData();
     };
 
-    class Barrier
+    class TaskRunner
     {
     private:
-        pthread_barrier_t _barrier;
+        static const string TASK_DELIMITER;
+        static const string PARAM_DELIMITER;
 
-        int number;
+        ValueStrategy<string, ThreadDelegate> *tasks;
+
+        string getTaskFromParametrizedCommand(string command);
+        vector<string> getParamsFromParametrizedCommand(string command);
 
     public:
-        Barrier(int number);
-        virtual ~Barrier();
+        TaskRunner();
+        virtual ~TaskRunner();
 
-        virtual int init();
-        virtual int wait();
-        virtual int destroy();
+        virtual void registerTask(string task, ThreadDelegate delegate);
+
+        virtual bool taskExist(string task);
+        virtual bool parametrizedTaskExist(string task);
+        virtual Thread* startTask(string task, void* data);
+        virtual Thread* startTask(ThreadDelegate delegate, void* data);
+        virtual void startTaskDetached(string task, void* data);
+        virtual void* runTask(string task, void* data);
+        virtual void* runParametrizedTask(string task, void* data);
     };
 
 }

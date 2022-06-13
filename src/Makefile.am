@@ -8,9 +8,14 @@ maininclude_HEADERS = \
     Argument.h \
     Signal.h \
     Observer.h \ 
-    Thread.h
+    Thread.h \
+    Queue.h \
+    Strategy.h
 
 common_sources = \
+    Queue.h \
+    Strategy.h \
+    \
     argument/Argument.cpp \
     argument/ArgumentAdapter.cpp \
     argument/ArgumentList.cpp \
@@ -29,6 +34,8 @@ common_sources = \
     \
     thread/Barrier.cpp \
     thread/Locker.cpp \
+    thread/TaskContext.cpp \
+    thread/TaskRunner.cpp \
     thread/Thread.cpp \
     thread/ThreadInterceptionData.h thread/ThreadInterceptionData.cpp \
     thread/ThreadPool.cpp \

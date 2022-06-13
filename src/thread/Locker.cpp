@@ -14,7 +14,7 @@ Locker::~Locker()
 
 int Locker::init()
 {
-    pthread_mutex_init(&_mutex, NULL);
+    return pthread_mutex_init(&_mutex, NULL);
 }
 
 int Locker::lock()
