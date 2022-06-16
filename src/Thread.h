@@ -92,7 +92,7 @@ namespace NoiseKernel
         Thread& operator+=(ThreadDelegate delegate);
         Thread& operator-=(ThreadDelegate delegate);
     };
-  
+
     class ThreadPool
     {
     private:
@@ -157,8 +157,6 @@ namespace NoiseKernel
 
         virtual bool taskExist(string task);
         virtual bool parametrizedTaskExist(string task);
-        virtual Task* startTask(string task, void* data);
-        virtual Task* startTask(ThreadDelegate delegate, void* data);
         virtual void* runTask(string task, void* data);
     };
 
