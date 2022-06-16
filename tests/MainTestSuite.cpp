@@ -7,6 +7,7 @@
 #include "observer/EventTest.h"
 #include "thread/ThreadTest.h"
 #include "thread/ThreadPoolTest.h"
+#include "thread/TaskRunnerTest.h"
 
 MainTestSuite::MainTestSuite(): UnitTestSuite("Main Test Suite", 0)
 {
@@ -28,4 +29,5 @@ void MainTestSuite::registerTests()
     registerTest(new EventTest);
     registerTest(new ThreadTest);
     registerTest(new ThreadPoolTest);
+    registerTest(new TaskRunnerTest);
 }

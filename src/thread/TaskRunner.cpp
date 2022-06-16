@@ -52,12 +52,7 @@ void TaskRunner::registerTask(string taskName, ThreadDelegate delegate)
 
 bool TaskRunner::taskExist(string taskName)
 {
-    return tasks->keyExists(taskName);
-}
-
-bool TaskRunner::parametrizedTaskExist(string taskName)
-{
-    return taskExist(getTaskFromParametrizedCommand(taskName));
+    return tasks->keyExists(getTaskFromParametrizedCommand(taskName));
 }
 
 // TODO: For Future needs..

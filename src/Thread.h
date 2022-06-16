@@ -156,7 +156,6 @@ namespace NoiseKernel
         virtual void registerTask(string task, ThreadDelegate delegate);
 
         virtual bool taskExist(string task);
-        virtual bool parametrizedTaskExist(string task);
         virtual void* runTask(string task, void* data);
     };
 
