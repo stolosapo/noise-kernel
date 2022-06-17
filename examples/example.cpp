@@ -121,13 +121,6 @@ void thread_example()
     runner.runTask("command1", NULL);
     runner.runTask("command_with_args?arg1=aa&arg2=lll&arg3=111", NULL);
 
-    NoiseKernel::Task *task = runner.startTask("command_with_args?arg1=aa&arg2=lll&arg3=111", NULL);
-    task->getRunningThread()->wait();
-
-    // Dont forget to dispose
-    delete task->getRunningThread();
-    delete task;
-
     cout << "task finised!" << endl << endl;
 
 }
