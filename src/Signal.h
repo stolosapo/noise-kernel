@@ -26,7 +26,7 @@ namespace NoiseKernel
 
         virtual int getSignalNumber();
 
-        virtual SignalHandlerFunction setup();
+        virtual void setup();
         virtual void raiseSignal();
 
         virtual sig_atomic_t getSignaled() = 0;

@@ -4,17 +4,16 @@
 #include <noisekernel/Argument.h>
 #include <noisekernel/Signal.h>
 #include <noisekernel/Observer.h>
+#include <noisekernel/Thread.h>
 
-#include "argument/ExampleArgumentAdapter.h"
-#include "observer/MockDelegate.h"
-#include "observer/MockEventHandler.h"
-#include "observer/MockSender.h"
+#include "mocks/mocks.h"
 
 using namespace std;
 
-int argument_example(int argc, char* argv[]);
+void argument_example(int argc, char* argv[]);
 void signal_example();
 void observer_example();
+void thread_example();
 
 int main(int argc, char* argv[])
 {
@@ -23,9 +22,10 @@ int main(int argc, char* argv[])
     argument_example(argc, argv);
     signal_example();
     observer_example();
+    thread_example();
 }
 
-int argument_example(int argc, char* argv[])
+void argument_example(int argc, char* argv[])
 {
     cout << "Example for arguments of noisekernel" << endl << endl;
 
@@ -33,7 +33,7 @@ int argument_example(int argc, char* argv[])
     NoiseKernel::ArgumentProvider provider(argc, argv);
 
     // Then a new instance of the adapter that we have create for the specific system
-    ExampleArgumentAdapter adapter(&provider);
+    MockArgumentAdapter adapter(&provider);
 
     // not forget to register the arguments
     adapter.registerArguments();
@@ -67,14 +67,14 @@ void observer_example()
     cout << "Example for observers usage of noisekernel" << endl << endl;
 
     // We need a sender that probably will trigger the event
-    MockSender aSender;
+    MockObserverSender aSender;
     cout << "Now sender has: " << aSender.counter << endl;
 
     // First we declate an Event
     NoiseKernel::Event onSomethingHappen;
 
     // and we add to it methods to run.. we can add more than one like delegate mode
-    onSomethingHappen += mockDelegate;
+    onSomethingHappen += mockObserverDelegate;
 
     // or as handlers if we want more complex things to do
     MockEventHandler aHandler;
@@ -86,4 +86,41 @@ void observer_example()
 
     // Then happens whatever `mockDelegete` and `aHandler` says..
     cout << "Now sender has: " << aSender.counter << endl << endl;
+}
+
+void thread_example()
+{
+    cout << "Example for threads usage of noisekernel" << endl << endl;
+
+    // First we create a new instance of Thread
+    NoiseKernel::Thread th;
+
+    // we assign to it a job to do, for example a mock one
+    th += &mockThreadDelegate;
+
+    // and start it with some input
+    th.start(&th);
+    // dont forget to wait in order for the thread to join back into system
+    th.wait();
+    cout << "thread finised!" << endl << endl;
+
+    // Or use a Thread Pool
+    NoiseKernel::ThreadPool pool(3);
+    NoiseKernel::Thread *next = pool.getNext();
+    next->attachDelegate(&mockThreadDelegate);
+    next->start(next);
+    next->wait();
+    cout << "thread finised!" << endl << endl;
+    pool.putBack(next);
+
+    // Or use a TaskRunner
+    NoiseKernel::TaskRunner runner;
+    runner.registerTask("command1", &mockTaskDelegate);
+    runner.registerTask("command_with_args", &mockTaskDelegate);
+
+    runner.runTask("command1", NULL);
+    runner.runTask("command_with_args?arg1=aa&arg2=lll&arg3=111", NULL);
+
+    cout << "task finised!" << endl << endl;
+
 }

@@ -20,7 +20,7 @@ int Signal::getSignalNumber()
     return this->signalNumber;
 }
 
-SignalHandlerFunction Signal::setup()
+void Signal::setup()
 {
     struct sigaction sig_struct;
 

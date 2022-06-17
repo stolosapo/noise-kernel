@@ -7,9 +7,15 @@ mainincludedir = $(includedir)/noisekernel
 maininclude_HEADERS = \
     Argument.h \
     Signal.h \
-    Observer.h
+    Observer.h \
+    Thread.h \
+    Queue.h \
+    Strategy.h
 
 common_sources = \
+    Queue.h \
+    Strategy.h \
+    \
     argument/Argument.cpp \
     argument/ArgumentAdapter.cpp \
     argument/ArgumentList.cpp \
@@ -25,6 +31,14 @@ common_sources = \
     observer/Event.cpp \
     observer/EventArgs.cpp \
     observer/EventHandler.cpp \
+    \
+    thread/Barrier.cpp \
+    thread/Locker.cpp \
+    thread/Task.cpp \
+    thread/TaskRunner.cpp \
+    thread/Thread.cpp \
+    thread/ThreadContext.h thread/ThreadContext.cpp \
+    thread/ThreadPool.cpp \
     \
     utils/StringHelper.h utils/StringHelper.cpp
 
