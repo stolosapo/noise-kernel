@@ -10,7 +10,8 @@ maininclude_HEADERS = \
     Observer.h \
     Thread.h \
     Queue.h \
-    Strategy.h
+    Strategy.h \
+    Exception.h
 
 common_sources = \
     Queue.h \
@@ -39,6 +40,11 @@ common_sources = \
     thread/Thread.cpp \
     thread/ThreadContext.h thread/ThreadContext.cpp \
     thread/ThreadPool.cpp \
+    \
+    exception\DomainErrorCode.cpp \
+    exception\DomainException.cpp \
+    exception\ExceptionMapper.cpp \
+    exception\RuntimeException.cpp \
     \
     utils/StringHelper.h utils/StringHelper.cpp
 
