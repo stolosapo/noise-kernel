@@ -1,6 +1,6 @@
 #include <arpa/inet.h>
 #include <iostream>
-#include "TcpStream.h"
+#include "../Tcp.h"
 
 using namespace std;
 using namespace NoiseKernel;

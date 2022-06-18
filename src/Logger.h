@@ -3,7 +3,7 @@
 
 namespace NoiseKernel
 {
-    typedef void (*LogDelegate)(const char* message);
+    typedef void (*LogDelegate)(string message);
 
     struct LogService
     {

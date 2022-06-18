@@ -11,7 +11,9 @@ maininclude_HEADERS = \
     Thread.h \
     Queue.h \
     Strategy.h \
-    Exception.h
+    Exception.h \
+    Tcp.h \
+    Logger.h
 
 common_sources = \
     Queue.h \
@@ -46,7 +48,19 @@ common_sources = \
     exception/ExceptionMapper.cpp \
     exception/RuntimeException.cpp \
     \
-    utils/StringHelper.h utils/StringHelper.cpp
+    tcp/TcpAcceptor.cpp \
+    tcp/TcpClient.cpp \
+    tcp/TcpClientConfig.cpp \
+    tcp/TcpClientInfo.cpp \
+    tcp/TcpConnector.cpp \
+    tcp/TcpErrorCode.cpp \
+    tcp/TcpProtocol.cpp \
+    tcp/TcpServer.cpp \
+    tcp/TcpServerConfig.cpp \
+    tcp/TcpStream.cpp \
+    \
+    utils/StringHelper.h utils/StringHelper.cpp \
+    utils/Console.h utils/Console.cpp
 
 
 noisekernel_SOURCES = main.cpp $(common_sources)

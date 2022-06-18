@@ -1,7 +1,7 @@
 #include <string.h>
 #include <netdb.h>
 #include <arpa/inet.h>
-#include "TcpConnector.h"
+#include "../Tcp.h"
 
 using namespace NoiseKernel;
 

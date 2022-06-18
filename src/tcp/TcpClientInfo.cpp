@@ -6,7 +6,7 @@
 using namespace std;
 using namespace NoiseKernel;
 
-ClientInfo::ClientInfo(void *server, TcpStream *stream, Thread *thread, int index)
+TcpClientInfo::TcpClientInfo(void *server, TcpStream *stream, Thread *thread, int index)
 {
     this->index = index;
 
@@ -15,7 +15,7 @@ ClientInfo::ClientInfo(void *server, TcpStream *stream, Thread *thread, int inde
     this->thread = thread;
 }
 
-ClientInfo::ClientInfo(void *server, TcpStream *stream, int index)
+TcpClientInfo::TcpClientInfo(void *server, TcpStream *stream, int index)
 {
     this->index = index;
 
@@ -23,7 +23,7 @@ ClientInfo::ClientInfo(void *server, TcpStream *stream, int index)
     this->server = server;
 }
 
-ClientInfo::~ClientInfo()
+TcpClientInfo::~TcpClientInfo()
 {
     if (stream != NULL)
     {
@@ -31,32 +31,32 @@ ClientInfo::~ClientInfo()
     }
 }
 
-int ClientInfo::getIndex()
+int TcpClientInfo::getIndex()
 {
     return index;
 }
 
-Thread* ClientInfo::getThread()
+Thread* TcpClientInfo::getThread()
 {
     return thread;
 }
 
-string ClientInfo::getName()
+string TcpClientInfo::getName()
 {
     return name;
 }
 
-string ClientInfo::getIp()
+string TcpClientInfo::getIp()
 {
     return ip;
 }
 
-string ClientInfo::getHostname()
+string TcpClientInfo::getHostname()
 {
     return hostname;
 }
 
-string ClientInfo::getIdentity()
+string TcpClientInfo::getIdentity()
 {
     string strIndex = numberToString<int>(index);
 
@@ -68,27 +68,27 @@ string ClientInfo::getIdentity()
     return strIndex + " - " + thread->getStringId();
 }
 
-TcpStream* ClientInfo::getStream()
+TcpStream* TcpClientInfo::getStream()
 {
     return stream;
 }
 
-void* ClientInfo::getServer()
+void* TcpClientInfo::getServer()
 {
     return server;
 }
 
-void ClientInfo::setName(string name)
+void TcpClientInfo::setName(string name)
 {
     this->name = name;
 }
 
-void ClientInfo::setIp(string ip)
+void TcpClientInfo::setIp(string ip)
 {
     this->ip = ip;
 }
 
-void ClientInfo::setHostname(string hostname)
+void TcpClientInfo::setHostname(string hostname)
 {
     this->hostname = hostname;
 }
