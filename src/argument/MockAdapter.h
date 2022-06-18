@@ -20,6 +20,9 @@ public:
     string getArg1();
     int getArg2();
     bool getArg3();
+
+    bool isTcpServer();
+    bool isTcpClient();
 };
 
 #endif // MockAdapter_h__
