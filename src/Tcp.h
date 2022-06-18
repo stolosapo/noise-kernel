@@ -16,10 +16,10 @@ using namespace std;
 
 namespace NoiseKernel
 {
-    static const DomainErrorCode TCS0001;
-    static const DomainErrorCode TCS0002;
-    static const DomainErrorCode TCC0001;
-    static const DomainErrorCode TCP0001;
+    extern const DomainErrorCode TCS0001;
+    extern const DomainErrorCode TCS0002;
+    extern const DomainErrorCode TCC0001;
+    extern const DomainErrorCode TCP0001;
 
     class TcpStream
     {
