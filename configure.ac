@@ -19,7 +19,7 @@ AC_DISABLE_STATIC
 AC_PROG_LIBTOOL(libtool)
 
 # Checks for header files.
-AC_CHECK_HEADERS([stdarg.h stdio.h stdlib.h unistd.h sys/types.h sys/wait.h])
+AC_CHECK_HEADERS([stdarg.h stdio.h stdlib.h unistd.h sys/types.h sys/socket.h sys/wait.h])
 AC_CHECK_HEADERS([exception errno.h])
 AC_CHECK_HEADERS([string map vector queue])
 AC_CHECK_HEADERS([limits])
@@ -27,6 +27,8 @@ AC_CHECK_HEADERS([cstring fstream sstream])
 AC_CHECK_HEADERS([signal.h])
 AC_CHECK_HEADERS([sys/time.h time.h])
 AC_CHECK_HEADERS(pthread.h,, [AC_MSG_ERROR([pthread.h required])])
+AC_CHECK_HEADERS(arpa/inet.h,, [AC_MSG_ERROR([arpa/inet.h required])])
+AC_CHECK_HEADERS(netdb.h,, [AC_MSG_ERROR([netdb.h required])])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
