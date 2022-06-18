@@ -41,10 +41,10 @@ common_sources = \
     thread/ThreadContext.h thread/ThreadContext.cpp \
     thread/ThreadPool.cpp \
     \
-    exception\DomainErrorCode.cpp \
-    exception\DomainException.cpp \
-    exception\ExceptionMapper.cpp \
-    exception\RuntimeException.cpp \
+    exception/DomainErrorCode.cpp \
+    exception/DomainException.cpp \
+    exception/ExceptionMapper.cpp \
+    exception/RuntimeException.cpp \
     \
     utils/StringHelper.h utils/StringHelper.cpp
 
