@@ -232,15 +232,15 @@ namespace NoiseKernel
 
         time_t startTime;
 
-        void* task(void*);
-        static void* internalClientTask(void *context);
+        void* task(void* tcpClientInfo);
+        static void* internalClientTask(void *tcpClientInfo);
 
         Thread* getNextThread();
         void finalizeClient(TcpClientInfo *client);
 
     protected:
         SignalAdapter* sigSrv;
-        LogService *logSrv;
+        LogService *logger;
         TcpServerConfig* config;
         TcpProtocol *protocol;
 
@@ -256,10 +256,8 @@ namespace NoiseKernel
         TcpServer(LogService *logSrv, SignalAdapter *sigSrv, TcpServerConfig *config, TcpProtocol *protocol);
         virtual ~TcpServer();
 
-        LogService* logger();
-
         virtual void start();
-        virtual void action();
+        virtual void serve();
 
         virtual double uptime();
         virtual int numberOfActiveConnections();

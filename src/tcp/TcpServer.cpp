@@ -9,8 +9,8 @@
 using namespace std;
 using namespace NoiseKernel;
 
-TcpServer::TcpServer(LogService *logSrv, SignalAdapter *sigSrv, TcpServerConfig *config, TcpProtocol *protocol)
-    : logSrv(logSrv), sigSrv(sigSrv), config(config), protocol(protocol)
+TcpServer::TcpServer(LogService *logger, SignalAdapter *sigSrv, TcpServerConfig *config, TcpProtocol *protocol)
+    : logger(logger), sigSrv(sigSrv), config(config), protocol(protocol)
 {
     startTime = time(0);
 
@@ -37,42 +37,33 @@ TcpServer::~TcpServer()
         if (it->second != NULL)
         {
             delete it->second;
-            logSrv->info("Finalized client: " + numberToString<int>(it->first));
+            logger->info("Finalized client: " + numberToString<int>(it->first));
         }
     }
 
     activeClients.clear();
 
-    logSrv->trace("Server finalized!");
+    logger->trace("Server finalized!");
 }
 
-void* TcpServer::task(void *context)
+void* TcpServer::task(void *tcpClientInfo)
 {
-    TcpClientInfo* client = (TcpClientInfo *) context;
-
-    TcpServer* server = (TcpServer *) (client->getServer());
-    LogService* logger = server->logSrv;
+    TcpClientInfo* client = (TcpClientInfo*) tcpClientInfo;
     TcpStream* stream = client->getStream();
-
-
-    string input = "";
-
     string identity = client->getIdentity();
+    string input = "";  
 
     try
     {
         /* Check new client for acceptance */
-        server->protocol->handshake(client);
-
+        protocol->handshake(client);
         logger->trace("Server accepted new client: [" + identity + "]");
-
 
         /* receive messages */
         while (stream->receive(input) > 0)
         {
-
             /* Proccess input */
-            server->cycle(client, input);
+            cycle(client, input);
         }
 
         logger->trace("Client [" + identity + "] terminated");
@@ -82,15 +73,16 @@ void* TcpServer::task(void *context)
         logger->error(handle(e));
     }
 
-
     finalizeClient(client);
 
     return NULL;
 }
 
-void* TcpServer::internalClientTask(void *context)
+void* TcpServer::internalClientTask(void *tcpClientInfo)
 {
-    return ((TcpServer *)context)->task(context);
+    TcpClientInfo *client = (TcpClientInfo*) tcpClientInfo;
+    TcpServer* server = (TcpServer *) (client->getServer());
+    return server->task(tcpClientInfo);
 }
 
 Thread* TcpServer::getNextThread()
@@ -109,28 +101,20 @@ Thread* TcpServer::getNextThread()
 
 void TcpServer::finalizeClient(TcpClientInfo* client)
 {
-    TcpServer* server = (TcpServer *) (client->getServer());
+    pool->putBack(client->getThread());
 
-    server->pool->putBack(client->getThread());
-
-    map<int, TcpClientInfo*>::iterator it = server->activeClients.find(client->getIndex());
-    if (it != server->activeClients.end())
+    map<int, TcpClientInfo*>::iterator it = activeClients.find(client->getIndex());
+    if (it != activeClients.end())
     {
-        server->activeClients.erase(it);
+        activeClients.erase(it);
     }
 
     delete client;
 }
 
-LogService* TcpServer::logger()
-{
-    return this->logSrv;
-}
-
 double TcpServer::uptime()
 {
-    time_t now = time(0);
-    return difftime(now, startTime);
+    return difftime(time(0), startTime);
 }
 
 int TcpServer::numberOfActiveConnections()
@@ -142,63 +126,52 @@ void TcpServer::start()
 {
     int clientCount = 0;
 
-    logSrv->trace("Server is starting...");
+    logger->trace("Server is starting...");
 
     if (acceptor->start() != 0)
     {
         throw DomainException(TCS0001);
     }
 
-    logSrv->info("Server is started");
+    logger->info("Server is started");
 
     while (!sigSrv->gotSigInt())
     {
-
         if (!pool->hasNext())
         {
             continue;
         }
 
-
         /* Accept new client */
         TcpStream* stream = acceptor->accept();
-
         if (stream == NULL)
         {
             continue;
         }
 
-
         /* Take next thread */
         Thread* th = getNextThread();
-
         if (th == NULL)
         {
             delete stream;
             continue;
         }
 
-
         /* Create new client and start in new thread */
         TcpClientInfo* client = new TcpClientInfo(this, stream, th, clientCount);
-
         th->start(client);
-        string name = "TcpClient" + numberToString<int>(clientCount);
-        // th->setName(name.c_str());
-
 
         /* Add this client to active clients */
         activeClients[client->getIndex()] = client;
-
 
         /* Increase thead counter */
         clientCount++;
     }
 
-    logSrv->debug("Stopping server..");
+    logger->debug("Stopping server..");
 }
 
-void TcpServer::action()
+void TcpServer::serve()
 {
     this->initialize();
     this->start();
@@ -216,19 +189,16 @@ void TcpServer::initialize()
     /* Initialize thread pool */
     pool = new ThreadPool(poolSize);
 
-    logSrv->info("Server Name: " + config->getName());
-    logSrv->info("Server Description: " + config->getDescription());
-    logSrv->info("Server Hostname: " + hostname);
-    logSrv->info("Server Port: " + numberToString<int>(port));
-    logSrv->info("Server Poolsize: " + numberToString<int>(poolSize));
+    logger->info("Server Name: " + config->getName());
+    logger->info("Server Description: " + config->getDescription());
+    logger->info("Server Hostname: " + hostname);
+    logger->info("Server Port: " + numberToString<int>(port));
+    logger->info("Server Poolsize: " + numberToString<int>(poolSize));
 }
 
 void TcpServer::cycle(TcpClientInfo *client, string input)
 {
-    LogService* logger = ((TcpServer*) client->getServer())->logger();
-
     string trace = "received [" + client->getIdentity() + "] - " + input;
-
     logger->trace(trace);
 
     if (validateCommand(input))
@@ -241,8 +211,6 @@ void TcpServer::cycle(TcpClientInfo *client, string input)
         /* Process Error Message */
         processErrorCommand(client, input);
     }
-
-    logger = NULL;
 }
 
 bool TcpServer::validateCommand(string command)

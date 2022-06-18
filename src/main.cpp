@@ -57,7 +57,7 @@ void runTcpServer(NoiseKernel::LogService *logger, NoiseKernel::SignalAdapter *s
         &protocol
     );
 
-    server.action();
+    server.serve();
 
     cout << "TCP Server stopped" << endl << endl;
 }
