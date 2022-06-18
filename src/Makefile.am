@@ -53,7 +53,7 @@ common_sources = \
     tcp/TcpAcceptor.cpp \
     tcp/TcpClient.cpp \
     tcp/TcpClientConfig.cpp \
-    tcp/TcpClientInfo.cpp \
+    tcp/TcpClientConnection.cpp \
     tcp/TcpConnector.cpp \
     tcp/TcpErrorCode.cpp \
     tcp/TcpProtocol.cpp \

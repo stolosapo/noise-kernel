@@ -80,7 +80,7 @@ namespace NoiseKernel
         TcpStream* accept();
     };
 
-    class TcpClientInfo
+    class TcpClientConnection
     {
     private:
         int index;
@@ -95,9 +95,9 @@ namespace NoiseKernel
         void* server;
 
     public:
-        TcpClientInfo(void *server, TcpStream *stream, Thread *thread, int index);
-        TcpClientInfo(void *server, TcpStream *stream, int index);
-        virtual ~TcpClientInfo();
+        TcpClientConnection(void *server, TcpStream *stream, Thread *thread, int index);
+        TcpClientConnection(void *server, TcpStream *stream, int index);
+        virtual ~TcpClientConnection();
 
         int getIndex();
 
@@ -125,8 +125,8 @@ namespace NoiseKernel
         TcpProtocol(bool isServer);
         virtual ~TcpProtocol();
 
-        void handshake(TcpClientInfo *client);
-        void authenticate(TcpClientInfo *client);
+        void handshake(TcpClientConnection *client);
+        void authenticate(TcpClientConnection *client);
 
         virtual string prompt();
 
@@ -136,7 +136,7 @@ namespace NoiseKernel
         static bool exit(string command);
         static bool shutdown(string command);
         static bool error(string command);
-        static void error(TcpClientInfo *client);
+        static void error(TcpClientConnection *client);
 
     protected:
         static const char* PROMPT;
@@ -152,14 +152,14 @@ namespace NoiseKernel
 
         bool getIsServer();
 
-        void send(bool escape, TcpClientInfo *client, const char* command);
-        void receive(bool escape, TcpClientInfo *client, const char* expected, const DomainErrorCode& errorCode);
+        void send(bool escape, TcpClientConnection *client, const char* command);
+        void receive(bool escape, TcpClientConnection *client, const char* expected, const DomainErrorCode& errorCode);
 
-        void serverSend(TcpClientInfo *client, const char* command);
-        void serverReceive(TcpClientInfo *client, const char* expected, const DomainErrorCode& errorCode);
+        void serverSend(TcpClientConnection *client, const char* command);
+        void serverReceive(TcpClientConnection *client, const char* expected, const DomainErrorCode& errorCode);
 
-        void clientSend(TcpClientInfo *client, const char* command);
-        void clientReceive(TcpClientInfo *client, const char* expected, const DomainErrorCode& errorCode);
+        void clientSend(TcpClientConnection *client, const char* command);
+        void clientReceive(TcpClientConnection *client, const char* expected, const DomainErrorCode& errorCode);
 
     };
 
@@ -228,15 +228,15 @@ namespace NoiseKernel
     private:
         TcpAcceptor *acceptor;
         ThreadPool* pool;
-        map<int, TcpClientInfo*> activeClients;
+        map<int, TcpClientConnection*> activeClients;
 
         time_t startTime;
 
-        void* task(void* tcpClientInfo);
-        static void* internalClientTask(void *tcpClientInfo);
+        void* task(void* clientConnection);
+        static void* internalClientTask(void *clientConnection);
 
         Thread* getNextThread();
-        void finalizeClient(TcpClientInfo *client);
+        void finalizeClient(TcpClientConnection *client);
 
     protected:
         SignalAdapter* sigSrv;
@@ -246,11 +246,11 @@ namespace NoiseKernel
 
         virtual void initialize();
 
-        virtual void cycle(TcpClientInfo *client, string input);
+        virtual void cycle(TcpClientConnection *client, string input);
 
         virtual bool validateCommand(string command);
-        virtual void processCommand(TcpClientInfo *client, string command);
-        virtual void processErrorCommand(TcpClientInfo *client, string command);
+        virtual void processCommand(TcpClientConnection *client, string command);
+        virtual void processErrorCommand(TcpClientConnection *client, string command);
 
     public:
         TcpServer(LogService *logSrv, SignalAdapter *sigSrv, TcpServerConfig *config, TcpProtocol *protocol);
@@ -271,15 +271,15 @@ namespace NoiseKernel
         TcpClientConfig* config;
         SignalAdapter* sigSrv;
 
-        void finalizeClient(TcpClientInfo *client);
+        void finalizeClient(TcpClientConnection *client);
 
     protected:
-        LogService *logSrv;
+        LogService *logger;
         TcpProtocol *protocol;
 
         virtual void initialize();
-        virtual bool cycle(TcpClientInfo *client);
-        virtual void processCommand(TcpClientInfo *client, string command);
+        virtual bool cycle(TcpClientConnection *client);
+        virtual void processCommand(TcpClientConnection *client, string command);
 
     public:
         TcpClient(LogService *logSrv, SignalAdapter *sigSrv, TcpClientConfig *config, TcpProtocol *protocol);

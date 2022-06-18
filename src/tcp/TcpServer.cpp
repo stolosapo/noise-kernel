@@ -30,7 +30,7 @@ TcpServer::~TcpServer()
         delete this->pool;
     }
 
-    for (map<int, TcpClientInfo*>::iterator it = activeClients.begin();
+    for (map<int, TcpClientConnection*>::iterator it = activeClients.begin();
         it != activeClients.end();
         ++it)
     {
@@ -46,9 +46,9 @@ TcpServer::~TcpServer()
     logger->trace("Server finalized!");
 }
 
-void* TcpServer::task(void *tcpClientInfo)
+void* TcpServer::task(void *clientConnection)
 {
-    TcpClientInfo* client = (TcpClientInfo*) tcpClientInfo;
+    TcpClientConnection* client = (TcpClientConnection*) clientConnection;
     TcpStream* stream = client->getStream();
     string identity = client->getIdentity();
     string input = "";  
@@ -78,11 +78,11 @@ void* TcpServer::task(void *tcpClientInfo)
     return NULL;
 }
 
-void* TcpServer::internalClientTask(void *tcpClientInfo)
+void* TcpServer::internalClientTask(void *clientConnection)
 {
-    TcpClientInfo *client = (TcpClientInfo*) tcpClientInfo;
-    TcpServer* server = (TcpServer *) (client->getServer());
-    return server->task(tcpClientInfo);
+    TcpClientConnection *client = (TcpClientConnection*) clientConnection;
+    TcpServer* server = (TcpServer*) (client->getServer());
+    return server->task(clientConnection);
 }
 
 Thread* TcpServer::getNextThread()
@@ -99,11 +99,11 @@ Thread* TcpServer::getNextThread()
     return th;
 }
 
-void TcpServer::finalizeClient(TcpClientInfo* client)
+void TcpServer::finalizeClient(TcpClientConnection* client)
 {
     pool->putBack(client->getThread());
 
-    map<int, TcpClientInfo*>::iterator it = activeClients.find(client->getIndex());
+    map<int, TcpClientConnection*>::iterator it = activeClients.find(client->getIndex());
     if (it != activeClients.end())
     {
         activeClients.erase(it);
@@ -158,7 +158,7 @@ void TcpServer::start()
         }
 
         /* Create new client and start in new thread */
-        TcpClientInfo* client = new TcpClientInfo(this, stream, th, clientCount);
+        TcpClientConnection* client = new TcpClientConnection(this, stream, th, clientCount);
         th->start(client);
 
         /* Add this client to active clients */
@@ -196,7 +196,7 @@ void TcpServer::initialize()
     logger->info("Server Poolsize: " + numberToString<int>(poolSize));
 }
 
-void TcpServer::cycle(TcpClientInfo *client, string input)
+void TcpServer::cycle(TcpClientConnection *client, string input)
 {
     string trace = "received [" + client->getIdentity() + "] - " + input;
     logger->trace(trace);
@@ -218,13 +218,13 @@ bool TcpServer::validateCommand(string command)
     return true;
 }
 
-void TcpServer::processCommand(TcpClientInfo *client, string command)
+void TcpServer::processCommand(TcpClientConnection *client, string command)
 {
     TcpStream *stream = client->getStream();
     stream->send(command);
 }
 
-void TcpServer::processErrorCommand(TcpClientInfo *client, string command)
+void TcpServer::processErrorCommand(TcpClientConnection *client, string command)
 {
     /* send error message back */
     TcpProtocol::error(client);

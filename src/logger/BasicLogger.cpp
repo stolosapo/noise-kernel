@@ -1,5 +1,5 @@
-#include "../Logger.h"
 #include "BasicLogger.h"
+#include "../Logger.h"
 #include <iostream>
 #include <time.h>
 

@@ -9,8 +9,8 @@
 using namespace std;
 using namespace NoiseKernel;
 
-TcpClient::TcpClient(LogService *logSrv, SignalAdapter *sigSrv, TcpClientConfig *config, TcpProtocol *protocol)
-    : logSrv(logSrv), sigSrv(sigSrv), config(config), protocol(protocol)
+TcpClient::TcpClient(LogService *logger, SignalAdapter *sigSrv, TcpClientConfig *config, TcpProtocol *protocol)
+    : logger(logger), sigSrv(sigSrv), config(config), protocol(protocol)
 {
     this->connector = NULL;
 }
@@ -23,7 +23,7 @@ TcpClient::~TcpClient()
     }
 }
 
-void TcpClient::finalizeClient(TcpClientInfo *client)
+void TcpClient::finalizeClient(TcpClientConnection *client)
 {
     if (client != NULL)
     {
@@ -33,13 +33,13 @@ void TcpClient::finalizeClient(TcpClientInfo *client)
 
 void TcpClient::start()
 {
-    TcpClientInfo *client;
+    TcpClientConnection *client;
 
     client = NULL;
 
     try
     {
-        logSrv->trace("Client is connecting to server...");
+        logger->trace("Client is connecting to server...");
         stream = connector->connect(config->getServerPort(), config->getServerName().c_str());
 
         if (!stream)
@@ -47,11 +47,11 @@ void TcpClient::start()
             throw DomainException(TCC0001);
         }
 
-        client = new TcpClientInfo(this, stream, 0);
+        client = new TcpClientConnection(this, stream, 0);
 
         protocol->handshake(client);
 
-        logSrv->info("Client is connected");
+        logger->info("Client is connected");
 
         bool cont = true;
         while (cont)
@@ -59,7 +59,7 @@ void TcpClient::start()
             /* Check for interruption */
             if (sigSrv->gotSigInt())
             {
-                logSrv->debug("Stopping client.. ");
+                logger->debug("Stopping client.. ");
                 break;
             }
 
@@ -69,7 +69,7 @@ void TcpClient::start()
     }
     catch (DomainException& e)
     {
-        logSrv->error(handle(e));
+        logger->error(handle(e));
     }
 
     finalizeClient(client);
@@ -78,7 +78,6 @@ void TcpClient::start()
 void TcpClient::action()
 {
     this->initialize();
-
     this->start();
 }
 
@@ -90,13 +89,13 @@ void TcpClient::initialize()
     int serverPort = config->getServerPort();
     string strServerPort = numberToString<int>(serverPort);
 
-    logSrv->info("Client Name: " + config->getName());
-    logSrv->info("Client Description: " + config->getDescription());
-    logSrv->info("Server Server Name: " + strServerName);
-    logSrv->info("Server Port: " + strServerPort);
+    logger->info("Client Name: " + config->getName());
+    logger->info("Client Description: " + config->getDescription());
+    logger->info("Server Server Name: " + strServerName);
+    logger->info("Server Port: " + strServerPort);
 }
 
-bool TcpClient::cycle(TcpClientInfo *client)
+bool TcpClient::cycle(TcpClientConnection *client)
 {
     TcpStream *stream = client->getStream();
 
@@ -144,13 +143,13 @@ bool TcpClient::cycle(TcpClientInfo *client)
     }
     else
     {
-        logSrv->error(serverInput);
+        logger->error(serverInput);
     }
 
     return true;
 }
 
-void TcpClient::processCommand(TcpClientInfo *client, string command)
+void TcpClient::processCommand(TcpClientConnection *client, string command)
 {
     cout << command << endl;
 }

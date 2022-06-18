@@ -6,7 +6,7 @@
 using namespace std;
 using namespace NoiseKernel;
 
-TcpClientInfo::TcpClientInfo(void *server, TcpStream *stream, Thread *thread, int index)
+TcpClientConnection::TcpClientConnection(void *server, TcpStream *stream, Thread *thread, int index)
 {
     this->index = index;
 
@@ -15,7 +15,7 @@ TcpClientInfo::TcpClientInfo(void *server, TcpStream *stream, Thread *thread, in
     this->thread = thread;
 }
 
-TcpClientInfo::TcpClientInfo(void *server, TcpStream *stream, int index)
+TcpClientConnection::TcpClientConnection(void *server, TcpStream *stream, int index)
 {
     this->index = index;
 
@@ -23,7 +23,7 @@ TcpClientInfo::TcpClientInfo(void *server, TcpStream *stream, int index)
     this->server = server;
 }
 
-TcpClientInfo::~TcpClientInfo()
+TcpClientConnection::~TcpClientConnection()
 {
     if (stream != NULL)
     {
@@ -31,32 +31,32 @@ TcpClientInfo::~TcpClientInfo()
     }
 }
 
-int TcpClientInfo::getIndex()
+int TcpClientConnection::getIndex()
 {
     return index;
 }
 
-Thread* TcpClientInfo::getThread()
+Thread* TcpClientConnection::getThread()
 {
     return thread;
 }
 
-string TcpClientInfo::getName()
+string TcpClientConnection::getName()
 {
     return name;
 }
 
-string TcpClientInfo::getIp()
+string TcpClientConnection::getIp()
 {
     return ip;
 }
 
-string TcpClientInfo::getHostname()
+string TcpClientConnection::getHostname()
 {
     return hostname;
 }
 
-string TcpClientInfo::getIdentity()
+string TcpClientConnection::getIdentity()
 {
     string strIndex = numberToString<int>(index);
 
@@ -68,27 +68,27 @@ string TcpClientInfo::getIdentity()
     return strIndex + " - " + thread->getStringId();
 }
 
-TcpStream* TcpClientInfo::getStream()
+TcpStream* TcpClientConnection::getStream()
 {
     return stream;
 }
 
-void* TcpClientInfo::getServer()
+void* TcpClientConnection::getServer()
 {
     return server;
 }
 
-void TcpClientInfo::setName(string name)
+void TcpClientConnection::setName(string name)
 {
     this->name = name;
 }
 
-void TcpClientInfo::setIp(string ip)
+void TcpClientConnection::setIp(string ip)
 {
     this->ip = ip;
 }
 
-void TcpClientInfo::setHostname(string hostname)
+void TcpClientConnection::setHostname(string hostname)
 {
     this->hostname = hostname;
 }
