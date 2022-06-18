@@ -9,11 +9,10 @@
 using namespace std;
 using namespace NoiseKernel;
 
-TcpClient::TcpClient(LogService *logSrv, SignalAdapter *sigSrv, TcpClientConfig *config)
-    : logSrv(logSrv), sigSrv(sigSrv), config(config)
+TcpClient::TcpClient(LogService *logSrv, SignalAdapter *sigSrv, TcpClientConfig *config, TcpProtocol *protocol)
+    : logSrv(logSrv), sigSrv(sigSrv), config(config), protocol(protocol)
 {
     this->connector = NULL;
-    this->protocol = NULL;
 }
 
 TcpClient::~TcpClient()
@@ -21,11 +20,6 @@ TcpClient::~TcpClient()
     if (connector != NULL)
     {
         delete connector;
-    }
-
-    if (protocol != NULL)
-    {
-        delete protocol;
     }
 }
 
@@ -83,16 +77,9 @@ void TcpClient::start()
 
 void TcpClient::action()
 {
-    this->protocol = createProtocol();
-
     this->initialize();
 
     this->start();
-}
-
-TcpProtocol* TcpClient::createProtocol()
-{
-    return new TcpProtocol(false);
 }
 
 void TcpClient::initialize()

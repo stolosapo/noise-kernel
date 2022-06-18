@@ -9,14 +9,13 @@
 using namespace std;
 using namespace NoiseKernel;
 
-TcpServer::TcpServer(LogService *logSrv, SignalAdapter *sigSrv, TcpServerConfig *config)
-    : logSrv(logSrv), sigSrv(sigSrv), config(config)
+TcpServer::TcpServer(LogService *logSrv, SignalAdapter *sigSrv, TcpServerConfig *config, TcpProtocol *protocol)
+    : logSrv(logSrv), sigSrv(sigSrv), config(config), protocol(protocol)
 {
     startTime = time(0);
 
     this->acceptor = NULL;
     this->pool = NULL;
-    this->protocol = NULL;
 }
 
 TcpServer::~TcpServer()
@@ -29,11 +28,6 @@ TcpServer::~TcpServer()
     if (this->pool != NULL)
     {
         delete this->pool;
-    }
-
-    if (this->protocol != NULL)
-    {
-        delete this->protocol;
     }
 
     for (map<int, TcpClientInfo*>::iterator it = activeClients.begin();
@@ -133,11 +127,6 @@ LogService* TcpServer::logger()
     return this->logSrv;
 }
 
-TcpProtocol* TcpServer::getProtocol()
-{
-    return this->protocol;
-}
-
 double TcpServer::uptime()
 {
     time_t now = time(0);
@@ -211,14 +200,8 @@ void TcpServer::start()
 
 void TcpServer::action()
 {
-    this->protocol = createProtocol();
     this->initialize();
     this->start();
-}
-
-TcpProtocol* TcpServer::createProtocol()
-{
-    return new TcpProtocol(true);
 }
 
 void TcpServer::initialize()

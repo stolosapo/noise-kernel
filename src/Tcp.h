@@ -226,7 +226,6 @@ namespace NoiseKernel
     class TcpServer
     {
     private:
-        TcpProtocol *protocol;
         TcpAcceptor *acceptor;
         ThreadPool* pool;
         map<int, TcpClientInfo*> activeClients;
@@ -243,10 +242,8 @@ namespace NoiseKernel
         SignalAdapter* sigSrv;
         LogService *logSrv;
         TcpServerConfig* config;
+        TcpProtocol *protocol;
 
-        TcpProtocol* getProtocol();
-
-        virtual TcpProtocol* createProtocol();
         virtual void initialize();
 
         virtual void cycle(TcpClientInfo *client, string input);
@@ -256,7 +253,7 @@ namespace NoiseKernel
         virtual void processErrorCommand(TcpClientInfo *client, string command);
 
     public:
-        TcpServer(LogService *logSrv, SignalAdapter *sigSrv, TcpServerConfig *config);
+        TcpServer(LogService *logSrv, SignalAdapter *sigSrv, TcpServerConfig *config, TcpProtocol *protocol);
         virtual ~TcpServer();
 
         LogService* logger();
@@ -282,13 +279,12 @@ namespace NoiseKernel
         LogService *logSrv;
         TcpProtocol *protocol;
 
-        virtual TcpProtocol* createProtocol();
         virtual void initialize();
         virtual bool cycle(TcpClientInfo *client);
         virtual void processCommand(TcpClientInfo *client, string command);
 
     public:
-        TcpClient(LogService *logSrv, SignalAdapter *sigSrv, TcpClientConfig *config);
+        TcpClient(LogService *logSrv, SignalAdapter *sigSrv, TcpClientConfig *config, TcpProtocol *protocol);
         virtual ~TcpClient();
 
         void start();
