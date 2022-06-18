@@ -48,7 +48,7 @@ common_sources = \
     exception/ExceptionMapper.cpp \
     exception/RuntimeException.cpp \
     \
-    logger/BasicLogger.cpp \
+    logger/BasicLogger.h logger/BasicLogger.cpp \
     \
     tcp/TcpAcceptor.cpp \
     tcp/TcpClient.cpp \
