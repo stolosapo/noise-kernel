@@ -5,6 +5,8 @@
 #include <noisekernel/Signal.h>
 #include <noisekernel/Observer.h>
 #include <noisekernel/Thread.h>
+#include <noisekernel/Logger.h>
+#include <noisekernel/Tcp.h>
 
 #include "mocks/mocks.h"
 
@@ -14,6 +16,8 @@ void argument_example(int argc, char* argv[]);
 void signal_example();
 void observer_example();
 void thread_example();
+void tcp_server_example();
+void tcp_client_example();
 
 int main(int argc, char* argv[])
 {
@@ -123,4 +127,99 @@ void thread_example()
 
     cout << "task finised!" << endl << endl;
 
+}
+
+void tcp_server_example()
+{
+    cout << "Example for TCP Server usage of noisekernel" << endl << endl;
+    
+    // To run and start a tcp server will need..
+
+    // 1. a logger
+    NoiseKernel::LogService logger = NoiseKernel::buildBasicLogService();
+
+    // 2. a signal adapter
+    NoiseKernel::SignalAdapter signalAdapter;
+    signalAdapter.registerSignals();
+    signalAdapter.setup();
+
+    // 3. a protocol as server
+    // Warning: this protocol is only a very basic that does not do much things
+    // in order to be able to functionally use it, you will need to create
+    // a new class that inherits `NoiseKernel::TcpProtocol` and then you can 
+    // override the methods as you like.
+    NoiseKernel::TcpProtocol protocol(true);
+    
+    // 4. a config
+    NoiseKernel::TcpServerConfig config(
+        1,
+        "TcpServer",
+        "This is a simple Tcp Server",
+        NoiseKernel::TcpServerConfig::DEFAULT_HOSTNAME,
+        NoiseKernel::TcpServerConfig::DEFAULT_PORT,
+        NoiseKernel::TcpServerConfig::DEFAULT_THREAD_POOL_SIZE
+    );
+
+    // 5. and a server
+    // Warning: this server is only a very basic that does not do much things
+    // in order to be able to functionally use it, you will need to create
+    // a new class that inherits `NoiseKernel::TcpServer` and then you can 
+    // override the methods `validateCommand`, `processCommand` and or 
+    // `processErrorCommand`. Those methods re actual the handler of each request
+    NoiseKernel::TcpServer server(
+        &logger,
+        &signalAdapter,
+        &config,
+        &protocol
+    );
+
+    // Finaly you can serve
+    server.serve();
+}
+
+void tcp_client_example()
+{
+    cout << "Example for TCP Client usage of noisekernel" << endl << endl;
+    
+    // To run and start a tcp server will need..
+
+    // 1. a logger
+    NoiseKernel::LogService logger = NoiseKernel::buildBasicLogService();
+
+    // 2. a signal adapter
+    NoiseKernel::SignalAdapter signalAdapter;
+    signalAdapter.registerSignals();
+    signalAdapter.setup();
+
+    // 3. a protocol as client
+    // Warning: this protocol is only a very basic that does not do much things
+    // in order to be able to functionally use it, you will need to create
+    // a new class that inherits `NoiseKernel::TcpProtocol` and then you can 
+    // override the methods as you like.
+    NoiseKernel::TcpProtocol protocol(false);
+    
+    // 4. a config
+    NoiseKernel::TcpClientConfig config(
+        1,
+        "TcpConfig",
+        "This is a simple Tcp client",
+        NoiseKernel::TcpClientConfig::DEFAULT_SERVERNAME,
+        NoiseKernel::TcpClientConfig::DEFAULT_PORT
+    );
+
+    // 5. and a client
+    // Warning: this client is only a very basic that does not do much things
+    // in order to be able to functionally use it, you will need to create
+    // a new class that inherits `NoiseKernel::TcpClient` and then you can 
+    // override the methods `processCommand`. This method re actual the handler 
+    // of each request
+    NoiseKernel::TcpClient client(
+        &logger,
+        &signalAdapter,
+        &config,
+        &protocol
+    );
+
+    // Finaly you can start it
+    client.action();
 }
