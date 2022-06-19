@@ -33,4 +33,4 @@ git clean -xdf
 
 ### Use Library
 If everything installed fine then pass `-lnoisekernel` parameter in linker, when build your application.
-Then use it in your app like in `example/`.
+Then use it in your app like in `examples/`.
