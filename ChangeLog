@@ -10,3 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Signal`s package
 - `Observer`s package
 - `Thread`s package
+- `Exception`s package
+- `Logger` package
+- `Tcp` package

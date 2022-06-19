@@ -10,7 +10,10 @@ maininclude_HEADERS = \
     Observer.h \
     Thread.h \
     Queue.h \
-    Strategy.h
+    Strategy.h \
+    Exception.h \
+    Tcp.h \
+    Logger.h
 
 common_sources = \
     Queue.h \
@@ -40,7 +43,26 @@ common_sources = \
     thread/ThreadContext.h thread/ThreadContext.cpp \
     thread/ThreadPool.cpp \
     \
-    utils/StringHelper.h utils/StringHelper.cpp
+    exception/DomainErrorCode.cpp \
+    exception/DomainException.cpp \
+    exception/ExceptionMapper.cpp \
+    exception/RuntimeException.cpp \
+    \
+    logger/BasicLogger.h logger/BasicLogger.cpp \
+    \
+    tcp/TcpAcceptor.cpp \
+    tcp/TcpClient.cpp \
+    tcp/TcpClientConfig.cpp \
+    tcp/TcpClientConnection.cpp \
+    tcp/TcpConnector.cpp \
+    tcp/TcpErrorCode.cpp \
+    tcp/TcpProtocol.cpp \
+    tcp/TcpServer.cpp \
+    tcp/TcpServerConfig.cpp \
+    tcp/TcpStream.cpp \
+    \
+    utils/StringHelper.h utils/StringHelper.cpp \
+    utils/Console.h utils/Console.cpp
 
 
 noisekernel_SOURCES = main.cpp $(common_sources)
